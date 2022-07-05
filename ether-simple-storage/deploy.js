@@ -16,15 +16,29 @@ async function main() {
     "./SimpleStorage_sol_SimpleStorage.bin",
     "utf8"
   );
+  // const contractFactory = new ethers.ContractFactory(abi, binary, wallet);
+  // console.log("Deploying, please wait for a while...!");
+  // const contract = await contractFactory.deploy();
+  // const transactionReceipt = await contract.deployTransaction.wait(1);
 
-  const contractFactory = new ethers.ContractFactory(abi, binary, wallet);
-  console.log("Deploying, please wait for a while...!");
-  const contract = await contractFactory.deploy();
-  const transactionReceipt = await contract.deployTransaction.wait(1);
-  console.log("deployment transaction.....:");
-  console.log(contract.deployTransaction);
-  console.log("transaction receipt.....:");
-  console.log(transactionReceipt);
+  console.log("lets only deploy with transaction data:....");
+
+  const nonce = await wallet.getTransactionCount();
+
+  const tx = {
+    nonce: nonce,
+    gasPrice: 20000000000,
+    gasLimit: 1500000,
+    to: null,
+    value: 0,
+    data:
+      "0x" + fs.readFileSync("./SimpleStorage_sol_SimpleStorage.bin", "utf8"),
+    chainId: 1337,
+  };
+
+  const sentTxResponse = await wallet.sendTransaction(tx);
+  await sentTxResponse.wait(1);
+  console.log(sentTxResponse);
 }
 // git push -u origin main
 
