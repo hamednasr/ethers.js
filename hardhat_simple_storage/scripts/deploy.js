@@ -1,4 +1,3 @@
-const { computeAddress } = require("ethers/lib/utils")
 const { ethers, run, network } = require("hardhat")
 
 async function main() {
