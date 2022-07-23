@@ -10,17 +10,19 @@ contract FundMe {
     // 835001
     // 815663
     address public immutable i_owner;
-    uint public constant minimumUSD = 50 * 1e18;
+    uint256 public constant minimumUSD = 50 * 1e18;
     address[] public funders;
-    mapping(address => uint) public addressToAmountFunded;
+    mapping(address => uint256) public addressToAmountFunded;
+    AggregatorV3Interface public priceFeed;
 
-    constructor() {
+    constructor(address priceFeedAdress) {
         i_owner = msg.sender;
+        priceFeed = AggregatorV3Interface(priceFeedAdress);
     }
 
     function fund() public payable {
         require(
-            PriceConverter.getConversionRate(msg.value) > minimumUSD,
+            PriceConverter.getConversionRate(msg.value, priceFeed) > minimumUSD,
             "you should pay more!"
         );
         funders.push(msg.sender);
@@ -29,7 +31,7 @@ contract FundMe {
 
     function withdraw() public isOwner {
         // require(msg.sender == owner, 'you are not the owner!');
-        for (uint i = 0; i < funders.length; i++)
+        for (uint256 i = 0; i < funders.length; i++)
             addressToAmountFunded[funders[i]] = 0;
 
         funders = new address[](0);
