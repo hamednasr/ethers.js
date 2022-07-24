@@ -29,8 +29,53 @@ describe("FundMe", function() {
             )
         })
 
-        it("revert money less than 50$", async function() {
-            await expect(fundMe.fund({ value: "1000000000" })).to.be.reverted
+        // it("revert money less than 50$", async function() {
+        //     await expect(fundMe.fund({ value: "1000000000" })).to.be.reverted
+        // })
+
+        it("update the amount funded", async function() {
+            await fundMe.fund({ value: "1000000000000000000" })
+            const response = await fundMe.addressToAmountFunded(deployer)
+            assert.equal(response, "1000000000000000000")
+        })
+
+        it("adds a new funder to array", async function() {
+            await fundMe.fund({ value: "1000000000000000000" })
+            const funder = await fundMe.funders(0)
+            assert.equal(funder, deployer)
+        })
+    })
+
+    const sendValue = ethers.utils.parseEther("1")
+
+    describe("withdraw", function() {
+        beforeEach(async () => {
+            await fundMe.fund({ value: sendValue })
+        })
+        // it("withdraws ETH from a single funder", async () => {
+        //     // Arrange
+        //     const startingFundMeBalance =
+        //         await fundMe.provider.getBalance(fundMe.address)
+        //     const startingDeployerBalance =
+        //         await fundMe.provider.getBalance(deployer)
+
+        //     // Act
+
+        //     const transactionResponse = await fundMe.withdraw()
+        //     const transactionReceipt = await transactionResponse.wait(1)
+
+        //     const { gasUsed, effectiveGasPrice } = transactionReceipt
+        //     const gasCost = gasUsed.mul(effectiveGasPrice)
+
+        //     const endingFundMeBalance = await fundMe.provider.getBalance(
+        //         fundMe.address
+        //     )
+        //     const endingDeployerBalance =
+        //         await fundMe.provider.getBalance(deployer)
+
+        it("only owner can withdraw funds", async function() {
+            const accounts = ethers.getSigners()
+            const attacker = accounts[1]
         })
     })
 })
