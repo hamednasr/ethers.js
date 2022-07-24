@@ -15,9 +15,9 @@ contract FundMe {
     mapping(address => uint256) public addressToAmountFunded;
     AggregatorV3Interface public priceFeed;
 
-    constructor(address priceFeedAdress) {
+    constructor(address priceFeedAddress) {
         i_owner = msg.sender;
-        priceFeed = AggregatorV3Interface(priceFeedAdress);
+        priceFeed = AggregatorV3Interface(priceFeedAddress);
     }
 
     function fund() public payable {

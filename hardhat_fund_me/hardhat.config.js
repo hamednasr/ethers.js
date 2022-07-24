@@ -4,6 +4,8 @@ require("hardhat-gas-reporter")
 require("@nomiclabs/hardhat-etherscan")
 require("dotenv").config()
 require("solidity-coverage")
+require("@nomiclabs/hardhat-ethers")
+require("@nomicfoundation/hardhat-chai-matchers")
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 /**
@@ -26,7 +28,8 @@ module.exports = {
         rinkeby: {
             url: RINKEBY_RPC_URL,
             accounts: [PRIVATE_KEY],
-            chainId: 4
+            chainId: 4,
+            blockConfirmation: 6
         },
         localhost: {
             url: "http://localhost:8545",
